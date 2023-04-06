@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.memberB">	
+   <resultMap id="memResultB" type="memberVOB">
+   	  <result property="bp_join" column="bp_join" />
+      <result property="bp_id" column="bp_id" />
+      <result property="bp_pw" column="bp_pw" />
+      <result property="name" column="name" />
+      <result property="dp_name" column="dp_name" />
+      <result property="email" column="email" />
+      <result property="addr1" column="addr1" />
+      <result property="addr2" column="addr2" />
+      <result property="addr3" column="addr3" />
+      <result property="tel1" column="tel1" />
+      <result property="tel2" column="tel2" />
+      <result property="tel3" column="tel3" />
+      <result property="hp1" column="hp1" />
+      <result property="hp2" column="hp2" />
+      <result property="hp3" column="hp3" />
+      <result property="bin" column="bin" />
+      <result property="photo" column="photo" />
+      <result property="type" column="type" />
+      <result property="car" column="car" />
+      <result property="wallet" column="wallet" />
+      <result property="charge" column="charge" />
+      <result property="join_date" column="join_date" />
+      <result property="last_date" column="last_date" />
+      <result property="stop_date" column="stop_date" />
+      <result property="status" column="status" />
+      <result property="location_x" column="location_x" />
+      <result property="location_y" column="location_y" />
+   </resultMap> 
+   
+   <resultMap id="contractResultB" type="contractVO">
+   	  <result property="goodscon_id" column="goodscon_id" />
+      <result property="goods_id" column="goods_id" />
+      <result property="member_id" column="member_id" />
+      <result property="bp_id" column="bp_id" />
+      <result property="price" column="price" />
+      <result property="sale_date" column="sale_date" />
+      <result property="region" column="region" />
+   </resultMap> 
+ 
+ 
+ 	   <insert id="insertMemberB" parameterType="memberVOB">
+      <![CDATA[
+         insert into business(bp_id, bp_pw, name, dp_name, email, 
+         addr1, addr2, addr3, tel1, tel2, tel3, hp1, hp2, hp3)
+         values(#{bp_id}, #{bp_pw}, #{name}, #{dp_name}, #{email},
+         #{addr1}, #{addr2}, #{addr3},  #{tel1}, #{tel2}, #{tel3},
+         #{hp1}, #{hp2}, #{hp3} )
+      ]]>
+   </insert>
+               <!-- id 중복체크 하기위한 쿼리구문이다.크킄 
+               함수에서 개수가 0보다 큰지 확인하여 ID가 ​​이미 사용 중임을 나타낼 수 있는 쿼리문
+               제발돼라!!!!!!!!!!! 다시원상 복기 03.21  3교시..!!!
+               
+                -->
+   <select id="selectOverlappedIDB" parameterType="String" resultType="String">
+     select * from business 
+      where bp_id = #{bp_id}
+   </select>
+   
+	 <select id="loginByIdB"  resultType="memberVOB"   parameterType="memberVOB" >
+		<![CDATA[
+			select * from business	
+			where bp_id=#{bp_id} and bp_pw=#{bp_pw}		
+		]]>
+	 </select>
+  
+	<select id="selectMemberByIdB" resultType="memberVOB" parameterType="String">
+      <![CDATA[
+         select * from business where bp_id = #{bp_id}
+      ]]>
+   </select>
+   
+  <update id="updateMemberB" parameterType="memberVOB">
+	  <![CDATA[
+	    update business
+	    set bp_pw=#{bp_pw}, 
+	        name=#{name}, 
+	        email=#{email},
+	        addr1=#{addr1},
+	        addr2=#{addr2},
+	        addr3=#{addr3},
+	        tel1=#{tel1},
+	        tel2=#{tel2},
+	        tel3=#{tel3},
+	        hp1=#{hp1},
+	        hp2=#{hp2},
+	        hp3=#{hp3}
+	    where bp_id=#{bp_id}
+	  ]]>
+  </update>
+   
+   <select id="selectContractByIdB" resultMap="contractResultB">
+    <![CDATA[
+        SELECT * FROM goods_contract
+        WHERE bp_id = #{bp_id}
+        ORDER BY goodscon_id DESC
+    ]]>
+	</select>
+	
+	<!-- 회원탈퇴 -->
+	<delete id="memberDeleteB" parameterType="memberVOB">
+	   <![CDATA[	
+			delete FROM business
+			where bp_id=#{bp_id}
+			and bp_pw=#{bp_pw}
+		]]>
+	</delete>
+	
+	<!-- 회원정보조회 -->
+	<select id="selectMemberB" parameterType="String" resultType="MemberVOB">
+	SELECT * FROM business WHERE email = #{email} 
+	</select>
+	
+	<!-- 비밀번호변경 -->
+	<update id = "pwUpdate" parameterType="MemberVOB">
+	update business set bp_pw=#{bp_pw} where email = #{email}
+	</update>
+
+</mapper>

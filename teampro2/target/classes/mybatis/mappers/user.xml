@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+<mapper namespace="mapper.user">
+	
+	<select id="selectMyDetailInfo" resultType="memberVO"   parameterType="String"  >
+	    <![CDATA[
+			select * from member
+			where member_id=#{member_id}
+    	]]>
+	</select>	
+
+	
+	<!-- 회원탈퇴 -->
+		
+	<delete id="memberDelete" parameterType="memberVO">
+	   <![CDATA[	
+			delete FROM member
+			where member_id=#{member_id}
+			and member_pw=#{member_pw}
+		]]>
+	</delete>
+   
+   <!-- 회원정보 수정 -->
+   
+   <update id="updateUser" parameterType="memberVO">
+     <![CDATA[
+	     update member
+	     set 
+	     member_pw=#{member_pw}, 
+	     name=#{name},
+	     email1=#{email1},
+	     email2=#{email2},
+	     addr1=#{addr1},
+	     addr2=#{addr2},
+	     addr3=#{addr3},
+	     tel1=#{tel1},
+	     tel2=#{tel2},
+	     tel3=#{tel3},
+	     hp1=#{hp1},
+	     hp2=#{hp2},
+	     hp3=#{hp3}	
+	     where
+	     member_id=#{member_id}
+      ]]>      
+   </update> 
+	
+	<!-- 아이디/비밀번호 찾기 --> 
+	
+</mapper>
